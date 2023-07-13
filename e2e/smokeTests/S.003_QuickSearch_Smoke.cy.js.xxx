@@ -1,0 +1,30 @@
+describe('MSM Quick Search', () => {
+
+    beforeEach(function () {
+        cy.session('init', () => {
+            cy.loginMSM()
+        })
+        cy.intercept({ resourceType: /xhr|fetch/ }, { log: false });
+    })
+
+
+    it('can approve request in self-service', () => {
+
+        cy.goHome_MSM()
+
+        cy.get('[title="Quick Search"]')
+            .invoke('show')
+                .click()
+                    .then(() => {
+                        cy.get('#ctl00_quickSearch_searchText')
+                            .type('INC-39119')
+                                .then(()=> {
+                                   cy.get('[previewurl="/MSM/RFP/Forms/SummaryPages/RequestSummary.aspx?id=39114"]')
+                                        .should('be.visible')
+                                })
+                    });
+
+    })
+
+
+})
